@@ -1,4 +1,4 @@
-mingw-w64 Makefile
+mingw-w64 Toolchain Makefile
 ===
 
 I use this thing to build a mingw-w64 cross compiler (on OSX usually).
