@@ -8,5 +8,5 @@ I use this thing to build a mingw-w64 cross compiler (on OSX usually).
 * Fiddle with the vars to match your needs.
 * `make` (parallel make is not supported)
 
-If it help fine. If it doesn't, then you can either provide a pull request to
+If it helps: fine. If it doesn't, then you can either provide a pull request to
 fix things, or shut up about it ;)
