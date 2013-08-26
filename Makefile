@@ -7,7 +7,7 @@ GCC = 4.8.1
 HOSTCC=$(shell which cc)
 HOSTCXX=$(shell which c++)
 
-all: gcc.stamp
+all: gcc.stamp pthread.stamp
 
 clean:
 	rm -f *.stamp
@@ -40,6 +40,14 @@ gcc-boot.stamp: ../gcc-$(GCC) headers.stamp binutils.stamp
 crt.stamp: ../mingw-w64 gcc-boot.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) \
+		CFLAGS="-O3 -march=core2 -mtune=generic -mfpmath=sse"
+	make -C $(basename $@) -j5
+	make -C $(basename $@) -j5 install
+	touch $@
+
+pthread.stamp: ../pthread gcc.stamp
+	mkdir -p $(basename $@) && cd $(basename $@) && \
+		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) --disable-shared \
 		CFLAGS="-O3 -march=core2 -mtune=generic -mfpmath=sse"
 	make -C $(basename $@) -j5
 	make -C $(basename $@) -j5 install
