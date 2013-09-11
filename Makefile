@@ -51,6 +51,9 @@ pthread.stamp: ../pthread gcc.stamp
 		CFLAGS="-O3 -march=core2 -mtune=generic -mfpmath=sse"
 	make -C $(basename $@) -j5
 	make -C $(basename $@) -j5 install
+	if [ -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" ]; then \
+		cp -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" "$(PREFIX)/$(TARGET)/lib/libpthread.a"; \
+	fi;
 	touch $@
 
 gcc.stamp: ../gcc-$(GCC) crt.stamp
