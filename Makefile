@@ -33,7 +33,7 @@ gcc-boot.stamp: ../gcc-$(GCC) headers.stamp binutils.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --target=$(TARGET) --enable-languages=c,c++,objc,obj-c++ --disable-nls --disable-multilib --enable-lto \
 		CC=$(HOSTCC) CXX=$(HOSTCXX) CXXCPP="$(HOSTCXX) -E"
-	make -C $(basename $@) -j5 all-gcc
+	make -C $(basename $@) -j2 all-gcc
 	make -C $(basename $@) -j5 install-gcc
 	touch $@
 
@@ -61,7 +61,7 @@ gcc.stamp: ../gcc-$(GCC) crt.stamp
 		../$</configure --target=$(TARGET) --enable-languages=c,c++,objc,obj-c++ --disable-nls --disable-multilib --enable-lto \
 		CC=$(HOSTCC) CXX=$(HOSTCXX) CXXCPP="$(HOSTCXX) -E" \
 		CFLAGS="-O3 -march=core2 -mtune=generic -mfpmath=sse"
-	make -C $(basename $@)
+	make -C $(basename $@) -j2
 	make -C $(basename $@) -j5 install
 	touch $@
 
