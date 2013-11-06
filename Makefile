@@ -1,3 +1,4 @@
+SUDO = sudo
 PREFIX = /usr/local
 TARCH = x86_64
 TARGET = $(TARCH)-w64-mingw32
@@ -20,8 +21,8 @@ clean:
 headers.stamp: ../mingw-w64/mingw-w64-headers
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) --enable-idl
-	make -C $(basename $@)
-	make -C $(basename $@) -j5 install
+	$(MAKE) -C $(basename $@)
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	touch $@
 
 binutils.stamp: ../binutils-$(BINUTILS)
@@ -29,8 +30,8 @@ binutils.stamp: ../binutils-$(BINUTILS)
 		../$</configure --prefix=$(PREFIX) --target=$(TARGET) --enable-targets=$(TARGET) --enable-lto --disable-nls --disable-multilib \
 		CC=$(HOSTCC) CXX=$(HOSTCXX) \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
-	make -C $(basename $@)
-	make -C $(basename $@) -j5 install
+	$(MAKE) -C $(basename $@)
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	touch $@
 
 gcc-boot.stamp: ../gcc-$(GCC) headers.stamp binutils.stamp
@@ -38,26 +39,26 @@ gcc-boot.stamp: ../gcc-$(GCC) headers.stamp binutils.stamp
 		../$</configure --target=$(TARGET) --enable-languages=c,c++,objc,obj-c++ --disable-nls --disable-multilib --enable-lto \
 		CC=$(HOSTCC) CXX=$(HOSTCXX) CXXCPP="$(HOSTCXX) -E" \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
-	make -C $(basename $@) -j2 all-gcc
-	make -C $(basename $@) -j5 install-gcc
+	$(MAKE) -C $(basename $@) -j2 all-gcc
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install-gcc
 	touch $@
 
 crt.stamp: ../mingw-w64 gcc-boot.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
-	make -C $(basename $@) -j5
-	make -C $(basename $@) -j5 install
+	$(MAKE) -C $(basename $@) -j5
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	touch $@
 
 pthread.stamp: ../mingw-w64/mingw-w64-libraries/winpthreads gcc.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) --disable-shared \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
-	make -C $(basename $@) -j5
-	make -C $(basename $@) -j5 install
+	$(MAKE) -C $(basename $@) -j5
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	if [ -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" ]; then \
-		cp -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" "$(PREFIX)/$(TARGET)/lib/libpthread.a"; \
+		$(SUDO) cp -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" "$(PREFIX)/$(TARGET)/lib/libpthread.a"; \
 	fi;
 	touch $@
 
@@ -66,8 +67,8 @@ gcc.stamp: ../gcc-$(GCC) crt.stamp
 		../$</configure --target=$(TARGET) --enable-languages=c,c++,objc,obj-c++ --disable-nls --disable-multilib --enable-lto \
 		CC=$(HOSTCC) CXX=$(HOSTCXX) CXXCPP="$(HOSTCXX) -E" \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
-	make -C $(basename $@) -j2
-	make -C $(basename $@) -j5 install
+	$(MAKE) -C $(basename $@) -j2
+	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	touch $@
 
 @PHONY: all clean
