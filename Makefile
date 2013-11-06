@@ -2,7 +2,7 @@ PREFIX = /usr/local
 TARGET = x86_64-w64-mingw32
 
 BINUTILS = 2.23.2
-GCC = 4.8.1
+GCC = 4.8.2
 
 HOSTCC=$(shell which cc)
 HOSTCXX=$(shell which c++)
