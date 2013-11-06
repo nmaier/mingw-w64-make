@@ -49,7 +49,7 @@ crt.stamp: ../mingw-w64 gcc-boot.stamp
 	make -C $(basename $@) -j5 install
 	touch $@
 
-pthread.stamp: ../pthread gcc.stamp
+pthread.stamp: ../mingw-w64/mingw-w64-libraries/winpthreads gcc.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) --disable-shared \
 		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
