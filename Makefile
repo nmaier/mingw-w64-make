@@ -22,7 +22,7 @@ all: gcc.stamp pthread.stamp
 
 clean:
 	rm -f *.stamp
-	rm -rf headers binutils gcc-boot crt gcc
+	rm -rf headers binutils gcc-boot crt gcc pthread
 
 headers.stamp: ../mingw-w64/mingw-w64-headers
 	mkdir -p $(basename $@) && cd $(basename $@) && \
