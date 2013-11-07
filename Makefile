@@ -12,6 +12,12 @@ OPTFLAGS = -O3 -msse2 -mfpmath=sse -mtune=generic -funroll-loops -funswitch-loop
 CFLAGS += $(OPTFLAGS)
 CXXFLAGS += $(OPTFLAGS)
 
+ifeq (,$(findstring i686,$(TARGET)))
+	CFLAGS_PTHREAD = $(CFLAGS)
+else
+	CFLAGS_PTHREAD = -O3 -mtune=generic
+endif
+
 all: gcc.stamp pthread.stamp
 
 clean:
@@ -54,7 +60,7 @@ crt.stamp: ../mingw-w64 gcc-boot.stamp
 pthread.stamp: ../mingw-w64/mingw-w64-libraries/winpthreads gcc.stamp
 	mkdir -p $(basename $@) && cd $(basename $@) && \
 		../$</configure --host=$(TARGET) --prefix=$(PREFIX)/$(TARGET) --disable-shared \
-		CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
+		CFLAGS="$(CFLAGS_PTHREAD)"
 	$(MAKE) -C $(basename $@) -j5
 	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	if [ -f "$(PREFIX)/$(TARGET)/lib/libwinpthread.a" ]; then \
