@@ -6,7 +6,7 @@ TARCH ?= x86_64
 TARGET ?= $(TARCH)-w64-mingw32
 HOST_PREFIX ?= $(PWD)/hostlibs
 
-BINUTILS ?= 2.23.2
+BINUTILS ?= 2.24
 GCC ?= 4.8.2
 
 HOST_CC ?= $(shell which cc)
@@ -124,7 +124,7 @@ binutils.stamp: ../binutils-$(BINUTILS) $(LIBGMP) $(LIBMPFR) $(LIBMPC) $(LIBCLOO
 		../$</configure --prefix=$(PREFIX) --target=$(TARGET) --enable-targets=$(TARGET) --enable-lto --disable-nls --disable-multilib \
 		--with-gmp=$(HOST_PREFIX) --with-mpfr=$(HOST_PREFIX) --with-mpc=$(HOST_PREFIX) --with-cloog=$(HOST_PREFIX) --with-cloog-include=$(HOST_PREFIX)/include/cloog-ppl \
 		CC=$(HOST_CC) CXX=$(HOST_CXX) \
-		CFLAGS="$(HOST_CFLAGS)" CXXFLAGS="$(HOST_CXXFLAGS)"
+		CFLAGS="$(HOST_CFLAGS) -Wno-unused-value" CXXFLAGS="$(HOST_CXXFLAGS)"
 	$(MAKE) -j2 -C $(basename $@)
 	$(SUDO) $(MAKE) -C $(basename $@) -j5 install
 	touch $@
