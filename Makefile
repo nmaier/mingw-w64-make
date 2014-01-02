@@ -65,7 +65,7 @@ headers.stamp: ../mingw-w64/mingw-w64-headers
 
 $(LIBGMP): ../gmp
 	mkdir -p $(<F) && cd $(<F) && \
-		../$</configure --prefix=$(HOST_PREFIX) --enable-cxx --disable-shared --enable-static \
+		../$</configure --prefix=$(HOST_PREFIX) --enable-cxx --disable-shared --enable-static --with-pic \
 		CC=$(HOST_CC) CXX=$(HOST_CXX) \
 		CFLAGS="$(HOST_CFLAGS)" CXXFLAGS="$(HOST_CXXFLAGS)"
 	$(MAKE) -j5 -C $(<F)
